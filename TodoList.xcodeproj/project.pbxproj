@@ -17,6 +17,7 @@
 		0375BCC124A539A300390661 /* TodoListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0375BCC024A539A300390661 /* TodoListUITests.swift */; };
 		0375BCCF24A53D4900390661 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0375BCCE24A53D4900390661 /* AddViewController.swift */; };
 		0375BCD124A53D5F00390661 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0375BCD024A53D5F00390661 /* EditViewController.swift */; };
+		0395E22624ABD41C0013D465 /* CheckTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0395E22524ABD41C0013D465 /* CheckTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		0375BCC224A539A300390661 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0375BCCE24A53D4900390661 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		0375BCD024A53D5F00390661 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		0395E22524ABD41C0013D465 /* CheckTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				0375BCA024A5399D00390661 /* SceneDelegate.swift */,
 				0375BCA224A5399D00390661 /* ViewController.swift */,
 				0375BCA424A5399D00390661 /* Main.storyboard */,
+				0395E22524ABD41C0013D465 /* CheckTableViewCell.swift */,
 				0375BCCE24A53D4900390661 /* AddViewController.swift */,
 				0375BCD024A53D5F00390661 /* EditViewController.swift */,
 				0375BCA724A539A200390661 /* Assets.xcassets */,
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0395E22624ABD41C0013D465 /* CheckTableViewCell.swift in Sources */,
 				0375BCD124A53D5F00390661 /* EditViewController.swift in Sources */,
 				0375BCA324A5399D00390661 /* ViewController.swift in Sources */,
 				0375BC9F24A5399D00390661 /* AppDelegate.swift in Sources */,

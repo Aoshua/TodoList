@@ -20,13 +20,44 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="A5I-r7-O8J">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="checkBoxCell" id="A5I-r7-O8J" customClass="CheckTableViewCell" customModule="TodoList" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="A5I-r7-O8J" id="PvP-Nw-3NN">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDH-nf-jax">
+                                                    <rect key="frame" x="20" y="10" width="25" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="cellCheck"/>
+                                                    <state key="normal" image="CheckmarkEmpty"/>
+                                                    <state key="selected" image="Checkmark"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vo5-nl-6fw">
+                                                    <rect key="frame" x="53" y="12" width="34" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="cellTitle"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10/07/2020" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQy-Tn-rMR">
+                                                    <rect key="frame" x="290" y="0.0" width="91" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="cellDate"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" identifier="cell"/>
+                                        <connections>
+                                            <outlet property="cellCheck" destination="TDH-nf-jax" id="er6-fE-Mhi"/>
+                                            <outlet property="cellDate" destination="KQy-Tn-rMR" id="pnd-Wq-BcO"/>
+                                            <outlet property="cellTitle" destination="Vo5-nl-6fw" id="Egm-b4-6Ys"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -138,9 +169,6 @@
                                             <constraint firstItem="9rf-BN-HkF" firstAttribute="leading" secondItem="thK-0R-960" secondAttribute="leading" id="BFk-QM-CAr"/>
                                             <constraint firstAttribute="trailing" secondItem="Hp9-ZE-XnM" secondAttribute="trailing" id="SHt-6b-3EL"/>
                                             <constraint firstItem="9rf-BN-HkF" firstAttribute="top" secondItem="thK-0R-960" secondAttribute="top" id="VsX-Qr-hjS"/>
-                                            <constraint firstItem="Hp9-ZE-XnM" firstAttribute="top" secondItem="9rf-BN-HkF" secondAttribute="bottom" constant="9" id="ZL5-Ef-SKv"/>
-                                            <constraint firstItem="Hp9-ZE-XnM" firstAttribute="leading" secondItem="thK-0R-960" secondAttribute="leading" id="iTr-ji-tuB"/>
-                                            <constraint firstAttribute="trailing" secondItem="9rf-BN-HkF" secondAttribute="trailing" id="vb8-1c-TD4"/>
                                         </constraints>
                                         <variation key="heightClass=compact" axis="horizontal"/>
                                     </stackView>
@@ -202,4 +230,8 @@
             <point key="canvasLocation" x="137.68115942028987" y="112.50000000000001"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Checkmark" width="30" height="30"/>
+        <image name="CheckmarkEmpty" width="30" height="30"/>
+    </resources>
 </document>
