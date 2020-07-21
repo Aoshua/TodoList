@@ -10,9 +10,12 @@ import UIKit
 
 class CheckTableViewCell: UITableViewCell {
 
+
     @IBOutlet weak var btnCheck: UIButton!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblDate: UILabel!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
