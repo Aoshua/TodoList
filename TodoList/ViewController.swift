@@ -24,21 +24,24 @@ func stringToDate(strDate: String) -> Date {
     return dateFormatter.date(from: strDate)!
 }
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+func dateToString(date: Date) -> String {
+    let dateFormatter = DateFormatter();
+    dateFormatter.dateFormat = "MM/dd/yyy"
+    
+    return dateFormatter.string(from: date)
+}
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EditProtocol, AddProtocol {
     
     var tasks: [Task] = []
     let dateFormatter = DateFormatter();
     var editTaskIndex: Int!
-    @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Todo List"
-        
-        // Hardcode task for now:
-        tasks.append(Task(title: "Task 1", description: "This is task 1", completed: false, scheduledDate: stringToDate(strDate: "10/07/2020"), remindDate: stringToDate(strDate: "07/10/2020")))
-
     }
     
     // Gets some things ready before moving to the next ViewController:
@@ -63,6 +66,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             editView?.selectedTask.scheduledDate = tasks[editTaskIndex].scheduledDate
             
         }
+    }
+    
+    // This is called by the AddViewController delegate:
+    func setResultOfAddTask(task: Task) {
+        // Get the new values from the AddViewController:
+        let newTask = Task(title: task.title, description: task.description, completed: task.completed, scheduledDate: task.scheduledDate, remindDate: task.remindDate)
+        
+        // Add them to the list of items:
+        tasks.append(newTask)
+        
+        // Reload the list:
+        self.tableView.reloadData()
     }
     
     // This is called by the EditViewController delegate:
@@ -91,9 +106,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         // Set the cell's properties
         cell.lblTitle.text = tasks[indexPath.row].title
-        //let thing1 = tasks[indexPath.row].scheduledDate
-        //let thing2 = dateFormatter.string(from: thing1)
-        cell.lblDate.text = "12/19/2020" //dateFormatter.string(from: tasks[indexPath.row].scheduledDate)
+        cell.lblDate.text = dateToString(date: tasks[indexPath.row].scheduledDate)
         cell.btnCheck.isSelected = tasks[indexPath.row].completed
         
         // Attach checkbox listener

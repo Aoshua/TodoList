@@ -8,25 +8,42 @@
 
 import UIKit
 
+// This protocol assists in passing values to ViewController.swift
+protocol AddProtocol {
+    func setResultOfAddTask(task: Task)
+}
+
 class AddViewController: UIViewController {
     
     @IBOutlet weak var txtTitle: UITextField!
     @IBOutlet weak var txtDescription: UITextView!
+    @IBOutlet weak var chkComplete: UISwitch!
+    @IBOutlet weak var dpScheduled: UIDatePicker!
+    @IBOutlet weak var dpReminder: UIDatePicker!
+    
+    // This delegate is used to communicated between this file and ViewController.swift
+    var delegate: AddProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Add New Task" // Sets the title in the navbar
+        
+        // Creates a navigation bar button linked to a "saveItem" method:
+        let save = UIBarButtonItem(barButtonSystemItem: .save,
+        target: self, action: #selector(saveItem))
+        self.navigationItem.rightBarButtonItem = save
+        
+        // This allows the user to click anywhere to close the keyboard
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        view.addGestureRecognizer(tap)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // This method is triggered when a user clicks save:
+    @objc func saveItem() {
+        // Calls back to ViewController with my data using the method specified in AddProtocol. That method will add a new item.
+        if(txtTitle.text != nil) {
+            delegate?.setResultOfAddTask(task: Task(title: txtTitle.text!, description: txtDescription.text!, completed: chkComplete.isOn, scheduledDate: dpScheduled.date, remindDate: dpReminder.date))
+            self.navigationController?.popViewController(animated: true)
+        }
     }
-    */
-
 }

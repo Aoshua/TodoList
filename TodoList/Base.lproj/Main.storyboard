@@ -186,6 +186,13 @@
                         <viewLayoutGuide key="safeArea" id="HS2-qv-whV"/>
                     </view>
                     <navigationItem key="navigationItem" id="HoT-5p-a8S"/>
+                    <connections>
+                        <outlet property="chkComplete" destination="j72-qq-hkO" id="Oo8-iB-Hcw"/>
+                        <outlet property="dpReminder" destination="BjU-2i-Srq" id="g5k-bq-hvU"/>
+                        <outlet property="dpScheduled" destination="6dz-kG-wal" id="Vq4-cH-zDf"/>
+                        <outlet property="txtDescription" destination="fGo-wn-Oyb" id="hyH-dC-yhl"/>
+                        <outlet property="txtTitle" destination="8SC-tc-tmv" id="jX6-st-ewS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZU2-vh-3xu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -303,7 +310,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="hOg-P9-yfj"/>
                     <connections>
-                        <outlet property="txtDescription" destination="qCh-oI-eoH" id="ruk-tw-y4M"/>
+                        <outlet property="chkComplete" destination="HYF-uy-uAH" id="7jO-fO-H1B"/>
+                        <outlet property="dpReminder" destination="kEP-lI-Dms" id="71S-cM-2ML"/>
+                        <outlet property="dpScheduled" destination="8Ii-33-DCz" id="Ev7-34-Qwa"/>
+                        <outlet property="txtDescription" destination="qCh-oI-eoH" id="sPK-06-aqT"/>
+                        <outlet property="txtTitle" destination="1di-mA-sRG" id="BSQ-Vk-wWs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lGf-pf-brV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

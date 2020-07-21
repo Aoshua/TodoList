@@ -15,6 +15,12 @@ protocol EditProtocol {
 
 class EditViewController: UIViewController {
     
+    @IBOutlet weak var txtTitle: UITextField!
+    @IBOutlet weak var txtDescription: UITextView!
+    @IBOutlet weak var chkComplete: UISwitch!
+    @IBOutlet weak var dpScheduled: UIDatePicker!
+    @IBOutlet weak var dpReminder: UIDatePicker!
+    
     var selectedTask = Task(title: "", description: "", completed: false, scheduledDate: Date(), remindDate: Date())
     // This delegate is used to communicated between this file and ViewController.swift
     var delegate: EditProtocol?
@@ -31,11 +37,20 @@ class EditViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = save
     }
     
+    // Sets the UI inputs to the task's properties
+    override func viewWillAppear(_ animated: Bool) {
+        txtTitle.text = selectedTask.title
+        txtDescription.text = selectedTask.description
+        chkComplete.isOn = selectedTask.completed
+        dpScheduled.date = selectedTask.scheduledDate
+        dpReminder.date = selectedTask.remindDate
+    }
+    
     // This method is triggered when a user clicks save:
     @objc func saveItem() {
         // Calls back to ViewController with my data using the method specified in AddProtocol. That method will add a new item.
-        if(txtShort.text != nil && txtLong.text != nil) {
-            delegate?.setResultOfEditTask(task: Task(title: "", description: "", completed: false, scheduledDate: Date(), remindDate: Date()))
+        if(txtTitle.text != nil) {
+            delegate?.setResultOfEditTask(task: Task(title: txtTitle.text!, description: txtDescription.text!, completed: chkComplete.isOn, scheduledDate: dpScheduled.date, remindDate: dpReminder.date))
             self.navigationController?.popViewController(animated: true)
         }
     }
