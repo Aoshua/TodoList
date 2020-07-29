@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import SQLite3
 
 // Global variables:
 let notifCenter = UNUserNotificationCenter.current()
@@ -31,6 +32,12 @@ func stringToDate(strDate: String) -> Date {
 func dateToString(date: Date) -> String {
     let dateFormatter = DateFormatter();
     dateFormatter.dateFormat = "MM/dd/yyy"
+    
+    return dateFormatter.string(from: date)
+}
+func dateToStringForSql(date: Date) -> String {
+    let dateFormatter = DateFormatter();
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
     
     return dateFormatter.string(from: date)
 }
@@ -59,10 +66,11 @@ func createNotification(taskTitle: String, dueDate: Date, remindDate: Date) -> S
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EditProtocol, AddProtocol {
     
+    // Variables
     var tasks: [Task] = []
     let dateFormatter = DateFormatter();
     var editTaskIndex: Int!
-    
+    var db: OpaquePointer?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var chkShowComplete: UISwitch!
@@ -76,6 +84,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         notifCenter.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             // Potential todo: add code telling them how to enable later
         }
+        
+        prepareDatabase()
+        loadTasksFromDatabase()
+        
+        // Clear database (for testing):
+//        if sqlite3_exec(db, "DELETE FROM Tasks", nil, nil, nil) != SQLITE_OK {
+//            let errmsg = String(cString: sqlite3_errmsg(db)!)
+//            print("Error deleing from table: \(errmsg)")
+//        }
     }
     
     // Called when user taps chkShowComplete slider:
@@ -133,6 +150,124 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Reload the list:
         self.tableView.reloadData()
     }
+    
+    // Database Methods-------------------------------------------------------
+    func prepareDatabase() {
+        // Call "saveToDatabase" when the app looses focus:
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(saveToDatabase(_:)), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        // The database file:
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        .appendingPathComponent("TaskDB.sqlite")
+        
+        // Open the database:
+        if sqlite3_open(fileURL.path, &db) != SQLITE_OK {
+           print("Error opening database")
+        }
+
+        // Create table:
+        if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS Tasks (title TEXT, description TEXT, completed INT, scheduledDate REAL, remindDate REAL, remindId TEXT)", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("Error creating table: \(errmsg)")
+        }
+    }
+    
+    func loadTasksFromDatabase() {
+        // Select query:
+         let queryString = "SELECT * FROM Tasks"
+
+         // Statement pointer:
+         var stmt:OpaquePointer?
+
+         // Prepares the query:
+         if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("Error preparing insert: \(errmsg)")
+            return
+         }
+         
+        // Traverses through all the records:
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            let title = String(cString: sqlite3_column_text(stmt, 0))
+            let desc = String(cString: sqlite3_column_text(stmt, 1))
+            let completed = Bool(truncating: sqlite3_column_int(stmt, 2) as NSNumber)
+            let schldDate = Date(timeIntervalSinceReferenceDate: sqlite3_column_double(stmt, 3))
+            let rmdDate = Date(timeIntervalSinceReferenceDate: sqlite3_column_double(stmt, 4))
+            let rmdId = String(cString: sqlite3_column_text(stmt, 5))
+
+            //adding values to list
+            tasks.append(Task(title: title, description: desc, completed: completed, scheduledDate: schldDate, remindDate: rmdDate, remindId: rmdId))
+         }
+    }
+    
+    // Persists the list of tasks in the database:
+    @objc func saveToDatabase(_ notification:Notification) {
+        // Clear database:
+        if sqlite3_exec(db, "DELETE FROM Tasks", nil, nil, nil) != SQLITE_OK {
+            let errmsg = String(cString: sqlite3_errmsg(db)!)
+            print("Error deleing from table: \(errmsg)")
+        }
+        
+        // Select query:
+        let queryString = "INSERT INTO Tasks (title, description, completed, scheduledDate, remindDate, remindId) VALUES (?,?,?,?,?,?)"
+
+        // Statement pointer:
+        var stmt:OpaquePointer?
+        
+        for task in tasks {
+            // Prepares the query:
+            if sqlite3_prepare(db, queryString, -1, &stmt, nil) != SQLITE_OK{
+               let errmsg = String(cString: sqlite3_errmsg(db)!)
+               print("Error preparing insert: \(errmsg)")
+               return
+            }
+            
+            // Binds the parameters to columns in the database:
+            if sqlite3_bind_text(stmt, 1, (task.title as NSString).utf8String, -1, nil) != SQLITE_OK{
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding short: \(errmsg)")
+                return
+            }
+            if sqlite3_bind_text(stmt, 2, (task.description as NSString).utf8String, -1, nil) != SQLITE_OK{
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding long: \(errmsg)")
+                return
+            }
+            let rslt = task.completed ? 1 : 0
+            if sqlite3_bind_int(stmt, 3, Int32(rslt)) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding long: \(errmsg)")
+                return
+            }
+            if sqlite3_bind_double(stmt, 4, task.scheduledDate.timeIntervalSinceReferenceDate) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding long: \(errmsg)")
+                return
+            }
+            if sqlite3_bind_double(stmt, 5, task.remindDate.timeIntervalSinceReferenceDate) != SQLITE_OK {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding long: \(errmsg)")
+                return
+            }
+            if sqlite3_bind_text(stmt, 6, task.remindId, -1, nil) != SQLITE_OK{
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure binding long: \(errmsg)")
+                return
+            }
+            
+            //executing the query to insert values
+            if sqlite3_step(stmt) != SQLITE_DONE {
+                let errmsg = String(cString: sqlite3_errmsg(db)!)
+                print("failure inserting item: \(errmsg)")
+                return
+            }
+        
+            // Close the database:
+            sqlite3_close(db)
+        }
+    }
+    // End of Database Methods------------------------------------------------
     
     // Table View Methods-----------------------------------------------------
     // Called once at table initialization:
