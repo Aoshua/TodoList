@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ViewController.tableView(_:cellForRowAt:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tasks">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.checkboxClicked(_:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tasks">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddViewController.textViewDidBeginEditing(_:):AddViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "textView.textColor">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "EditViewController.viewDidLoad():EditViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "txtDescription.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
